@@ -6,7 +6,15 @@ from watchlist_app.models import Movie
 from .serializers import MovieSerializer
 
 #  -- -- CLASS BASED VIEW -- --
+class MovieListAV(APIView):
 
+    # function for get method
+    def get(self, request):
+        movies = Movie.objects.all()
+        serializer = MovieSerializer(movies, many=True)
+        return Response(serializer.data)
+    
+    
 
 #  -- -- FUNCTION BASED VIEW -- -- 
 # @api_view(['GET', 'POST'])
