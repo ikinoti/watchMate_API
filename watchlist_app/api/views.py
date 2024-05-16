@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import status
 from watchlist_app.models import Movie
 from .serializers import MovieSerializer
 
@@ -36,4 +37,7 @@ def movie_details(request, pk):
         else:
             return Response(serializer.errors)
         
-    
+    if request.method == 'DELETE':
+        movie = Movie.objects.get(pk=pk)
+        movie.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
