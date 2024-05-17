@@ -26,7 +26,7 @@ class MovieListAV(APIView):
 class MovieDetailAV(APIView):
 
     # get specific item
-    def get(self, request):
+    def get(self, request, pk):
         try:
             movie = Movie.objects.get(pk=pk)
         except Movie.DoesNotExist:
@@ -36,7 +36,7 @@ class MovieDetailAV(APIView):
         return Response(serializer.data)
     
     #  put method function
-    def put(self, request):
+    def put(self, request, pk):
         movie = Movie.objects.get(pk=pk)
         serializer = MovieSerializer(movie, data=request.data)
         if serializer.is_valid():
@@ -46,7 +46,7 @@ class MovieDetailAV(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     #  deletre function
-    def delete(self, request):
+    def delete(self, request, pk):
         movie = Movie.objects.get(pk=pk)
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
