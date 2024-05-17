@@ -8,13 +8,21 @@ from .serializers import MovieSerializer
 #  -- -- CLASS BASED VIEW -- --
 class MovieListAV(APIView):
 
-    # function for get method
+    # function for get request
     def get(self, request):
         movies = Movie.objects.all()
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)
     
+    def post(self, request):
+        serializer = MovieSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
     
+
 
 #  -- -- FUNCTION BASED VIEW -- -- 
 # @api_view(['GET', 'POST'])
