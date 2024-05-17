@@ -46,7 +46,10 @@ class MovieDetailAV(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     #  deletre function
-     
+    def delete(self, request):
+        movie = Movie.objects.get(pk=pk)
+        movie.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 #  -- -- FUNCTION BASED VIEW -- -- 
 # @api_view(['GET', 'POST'])
