@@ -36,8 +36,17 @@ class MovieDetailAV(APIView):
         return Response(serializer.data)
     
     #  put method function
-    
+    def put(self, request):
+        movie = Movie.objects.get(pk=pk)
+        serializer = MovieSerializer(movie, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    #  deletre function
+     
 
 #  -- -- FUNCTION BASED VIEW -- -- 
 # @api_view(['GET', 'POST'])
