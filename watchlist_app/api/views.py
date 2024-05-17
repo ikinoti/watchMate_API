@@ -14,6 +14,7 @@ class MovieListAV(APIView):
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)
     
+    # function for post method
     def post(self, request):
         serializer = MovieSerializer(data=request.data)
         if serializer.is_valid():
@@ -21,6 +22,20 @@ class MovieListAV(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+    
+class MovieDetailAV(APIView):
+
+    # get specific item
+    def get(self, request):
+        try:
+            movie = Movie.objects.get(pk=pk)
+        except Movie.DoesNotExist:
+            return Response({'Error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = MovieSerializer(movie)
+        return Response(serializer.data)
+    
+    #  put method function
     
 
 
