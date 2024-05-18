@@ -2,43 +2,43 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
-from watchlist_app.models import Movie
-from .serializers import MovieSerializer
+from watchlist_app.models import WatchList
+from .serializers import WatchListSerializer
 
 #  -- -- CLASS BASED VIEW -- --
-class MovieListAV(APIView):
+class WatchListAV(APIView):
 
     # function for get request
     def get(self, request):
-        movies = Movie.objects.all()
-        serializer = MovieSerializer(movies, many=True)
+        movies = WatchList.objects.all()
+        serializer = WatchListSerializer(movies, many=True)
         return Response(serializer.data)
     
     # function for post method
     def post(self, request):
-        serializer = MovieSerializer(data=request.data)
+        serializer = WatchListSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
     
-class MovieDetailAV(APIView):
+class WatchDetailAV(APIView):
 
     # get specific item
     def get(self, request, pk):
         try:
-            movie = Movie.objects.get(pk=pk)
-        except Movie.DoesNotExist:
-            return Response({'Error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
+            movie = WatchList.objects.get(pk=pk)
+        except WatchList.DoesNotExist:
+            return Response({'Error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = MovieSerializer(movie)
+        serializer = WatchListSerializer(movie)
         return Response(serializer.data)
     
     #  put method function
     def put(self, request, pk):
-        movie = Movie.objects.get(pk=pk)
-        serializer = MovieSerializer(movie, data=request.data)
+        movie = WatchList.objects.get(pk=pk)
+        serializer = WatchListSerializer(movie, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -47,7 +47,7 @@ class MovieDetailAV(APIView):
 
     #  deletre function
     def delete(self, request, pk):
-        movie = Movie.objects.get(pk=pk)
+        movie = WatchList.objects.get(pk=pk)
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
