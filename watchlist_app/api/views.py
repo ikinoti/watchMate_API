@@ -3,23 +3,49 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import status
 from watchlist_app.models import WatchList, StreamPlatform
-from .serializers import WatchListSerializer, StreamPlatfromSerializer
+from .serializers import WatchListSerializer, StreamPlatformSerializer
 
 #  -- -- CLASS BASED VIEW -- --
 class StreamPlatformAV(APIView):
 
     def get(self, request):
         platform = StreamPlatform.objects.all()
-        serializer = StreamPlatfromSerializer(platform, many=True)
+        serializer = StreamPlatformSerializer(platform, many=True)
         return Response(serializer.data)
     
     def post(self, request):
-        serializer = StreamPlatfromSerializer(data=request.data)
+        serializer = StreamPlatformSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+        
+class StreamPlatformDetailAV(APIView):
+    def get(self, request, pk):
+        try:
+            platform = StreamPlatform.objects.get(pk=pk)
+        except StreamPlatform.DoesNotExist:
+            return Response({'Error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = StreamPlatformSerializer(platform)
+        return Response(serializer.data)
+    
+    #  put method function
+    def put(self, request, pk):
+        platform = StreamPlatform.objects.get(pk=pk)
+        serializer = StreamPlatformSerializer(platform, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    #  delete function
+    def delete(self, request, pk):
+        platform = StreamPlatform.objects.get(pk=pk)
+        platform.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class WatchListAV(APIView):
 
