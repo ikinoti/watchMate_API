@@ -2,7 +2,7 @@ from django.urls import path
 # from .views import movie_list, movie_details
 from .views import (WatchListAV, WatchDetailAV,
                     StreamPlatformAV,StreamPlatformDetailAV, ReviewList,
-                    ReviewDetail)
+                    ReviewDetail, ReviewCreate)
 
 
 urlpatterns = [
@@ -13,6 +13,10 @@ urlpatterns = [
     path('stream/', StreamPlatformAV.as_view(), name='stream'),
     path('stream/<int:pk>', StreamPlatformDetailAV.as_view(), name='stream_detail'),
     
-    path('review', ReviewList.as_view(), name='review_list'),
-    path('review/<int:pk>', ReviewDetail.as_view(), name='review_detail'),
+    # path('review/', ReviewList.as_view(), name='review_list'),
+    # path('review/<int:pk>', ReviewDetail.as_view(), name='review_detail'),
+
+    path('stream/<int:pk>/review-create/', ReviewCreate.as_view(), name='review_create'),
+    path('stream/<int:pk>/review/', ReviewList.as_view(), name='review_list'),
+    path('stream/review/<int:pk>', ReviewDetail.as_view(), name='review_detail'),
 ]
