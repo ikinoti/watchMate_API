@@ -13,7 +13,7 @@ urlpatterns = [
     # path('list/', movie_list, name='movie-list'),
     # path('<int:pk>', movie_details, name='movie_details'),
     path('list/', WatchListAV.as_view(), name='movie_list'),
-    path('<int:pk>', WatchDetailAV.as_view(), name='movie_details'),
+    path('<int:pk>/', WatchDetailAV.as_view(), name='movie_details'),
 
     path('', include(router.urls)),
 
@@ -23,7 +23,7 @@ urlpatterns = [
     # path('review/', ReviewList.as_view(), name='review_list'),
     # path('review/<int:pk>', ReviewDetail.as_view(), name='review_detail'),
 
-    path('stream/<int:pk>/review-create/', ReviewCreate.as_view(), name='review_create'),
-    path('stream/<int:pk>/review/', ReviewList.as_view(), name='review_list'),
-    path('stream/review/<int:pk>', ReviewDetail.as_view(), name='review_detail'),
+    path('<int:pk>/review-create/', ReviewCreate.as_view(), name='review_create'),
+    path('<int:pk>/reviews/', ReviewList.as_view(), name='review_list'),
+    path('review/<int:pk>/', ReviewDetail.as_view(), name='review_detail'),
 ]
