@@ -7,7 +7,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 
 from django.shortcuts import get_object_or_404
 
@@ -15,11 +15,13 @@ from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from watchlist_app.models import WatchList, StreamPlatform, Review
 from .serializers import (WatchListSerializer,
                           StreamPlatformSerializer,ReviewSerializer)
+from .throttling import ReviewCreateThrottle, ReviewListThrottle
 
 # concrete api view
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ReviewCreateThrottle]
 
     def get_queryset(self):
         return Review.objects.all()
@@ -50,7 +52,7 @@ class ReviewList(generics.ListAPIView):
 
     serializer_class = ReviewSerializer
     # permission_classes = [IsAuthenticated]
-    throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    throttle_classes = [ReviewListThrottle, AnonRateThrottle]
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -60,7 +62,9 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsReviewUserOrReadOnly]
-    throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    # throttle_classes = [UserRateThrottle, AnonRateThrottle]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'review-detail'
 
 
 # concrete api view
