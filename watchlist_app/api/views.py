@@ -17,7 +17,7 @@ from watchlist_app.models import WatchList, StreamPlatform, Review
 from .serializers import (WatchListSerializer,
                           StreamPlatformSerializer,ReviewSerializer)
 from .throttling import ReviewCreateThrottle, ReviewListThrottle
-from .pagination import WatchListPagination
+from .pagination import WatchListPagination, WatchListLOPagination
 
 
 class UserReview(generics.ListAPIView):
@@ -183,7 +183,7 @@ class StreamPlatformDetailAV(APIView):
 class WatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
-    pagination_class = WatchListPagination
+    pagination_class = WatchListLOPagination
 
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields = ['title', 'platform__name']
