@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 from .permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from watchlist_app.models import WatchList, StreamPlatform, Review
@@ -177,6 +178,19 @@ class StreamPlatformDetailAV(APIView):
         platform = StreamPlatform.objects.get(pk=pk)
         platform.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class WatchListGV(generics.ListAPIView):
+    queryset = WatchList.objects.all()
+    serializer_class = WatchListSerializer
+
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['title', 'platform__name']
+
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['title', 'platform__name']
+
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['avg_rating'] 
 
 class WatchListAV(APIView):
     permission_classes = [IsAdminOrReadOnly]
