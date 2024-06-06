@@ -139,6 +139,7 @@ class StreamPlatformVS(viewsets.ModelViewSet):
 # END OF VIEW SETS VIEW
 class StreamPlatformAV(APIView):
     permission_classes = [IsAdminOrReadOnly]
+    throttle_classes = [AnonRateThrottle]
 
     def get(self, request):
         platform = StreamPlatform.objects.all()
